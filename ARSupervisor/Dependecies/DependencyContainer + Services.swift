@@ -5,8 +5,17 @@
 //  Created by Rodion Hladchenko on 01.10.2024.
 //
 
-extension DependencyContainer {
-    func makeServiceFactory() -> ServicesFactoryProtocol {
-        return ServicesFactory()
+protocol DomainServiceDependency {
+    func makeUserAuthService() -> UserAuthServiceProtocol
+}
+
+extension DependencyContainerProtected: DomainServiceDependency {
+    func makeUserAuthService() -> UserAuthServiceProtocol {
+        return UserAuthService(
+            loginUserUseCase: LoginUserUseCase(
+                backendService: networkDependency.networkManager.backendNetworkService,
+                authTokenRepository: repositoryDependency.makeAuthTokenRepository()
+            )
+        )
     }
 }

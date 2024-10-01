@@ -5,7 +5,11 @@
 //  Created by Rodion Hladchenko on 06.09.2024.
 //
 
-extension DependencyContainer {
+protocol NavigationContrllerDependency {
+    var navigationControllerFactory: NavigationControllerFactoryProtocol { get }
+}
+
+extension DependencyContainerProtected: NavigationContrllerDependency {
     var navigationControllerFactory: NavigationControllerFactoryProtocol {
         return NavigationControllerFactory()
     }

@@ -5,7 +5,11 @@
 //  Created by Rodion Hladchenko on 05.09.2024.
 //
 
-extension DependencyContainer {    
+protocol CoordinatorDependency {
+    var coordinatorFactory: CoordinatorFactoryProtocol { get }
+}
+
+extension DependencyContainerProtected: CoordinatorDependency {    
     var coordinatorFactory: CoordinatorFactoryProtocol {
         return CoordinatorFactory()
     }

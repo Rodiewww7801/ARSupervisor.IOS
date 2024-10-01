@@ -1,5 +1,5 @@
 //
-//  BackendNetwrokService.swift
+//  BackendNetworkService.swift
 //  ARSupervisor
 //
 //  Created by Rodion Hladchenko on 01.10.2024.
@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class BackendNetwrokService: NetworkServiceProtocol {
+class BackendNetworkService: NetworkServiceProtocol {
     let authSession: AuthSession
     let session: URLSession
     

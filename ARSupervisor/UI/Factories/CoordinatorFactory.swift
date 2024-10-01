@@ -11,8 +11,8 @@ import UIKit
 class CoordinatorFactory: CoordinatorFactoryProtocol {
     var appCoordinator: Coordinator? = nil
     
-    func makeAppCoordinator(window: UIWindow, navigationController: UINavigationController) -> Coordinator {
-        let appCoordinator = AppCoordinator(window: window, navigationController: navigationController)
+    func makeAppCoordinator(_ router: RouterProtocol, window: UIWindow) -> Coordinator {
+        let appCoordinator = AppCoordinator(router: router, window: window)
         self.appCoordinator = appCoordinator
         return appCoordinator
     }

@@ -5,8 +5,12 @@
 //  Created by Rodion Hladchenko on 01.10.2024.
 //
 
-extension DependencyContainer {
-    func repositoryFactory() -> RepositoryFactoryProtocol {
-        return RepositoryFactory()
+protocol RepositoryDependency {
+    func makeAuthTokenRepository() -> AuthTokenRepositoryProtocol
+}
+
+extension DependencyContainerProtected: RepositoryDependency  {
+    func makeAuthTokenRepository() -> AuthTokenRepositoryProtocol {
+        return AuthTokenRepository(securedStorage: storageDependency.keychainStorage)
     }
 }

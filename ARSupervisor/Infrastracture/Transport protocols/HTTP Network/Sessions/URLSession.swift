@@ -11,7 +11,7 @@ import Combine
 extension URLSession: NetworkSessionProtocol {
     
     private var requestBuilder: RequestBuilderProtocol {
-        return dependency.networkFactory.makeRequestBuilder()
+        return dependency.networkDependency.makeRequestBuilder()
     }
     
     func publisher<T>(_ requestModel: RequestModel) -> AnyPublisher<T, Error> where T: Decodable {

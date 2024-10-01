@@ -6,8 +6,10 @@
 //
 
 class MainCoordinator: Coordinator {
+    private var coordinatorFactory = dependency.coordinatorDependency.coordinatorFactory
     private var router: RouterProtocol
     var childCoordinators: [any Coordinator] = []
+    
     
     init(router: RouterProtocol) {
         self.router = router
@@ -23,7 +25,7 @@ class MainCoordinator: Coordinator {
     }
     
     func startLoginFlow() {
-        let coordinator = dependency.coordinatorFactory.makeLoginCoordinator(router)
+        let coordinator = coordinatorFactory.makeLoginCoordinator(router)
         coordinator.start()
     }
     

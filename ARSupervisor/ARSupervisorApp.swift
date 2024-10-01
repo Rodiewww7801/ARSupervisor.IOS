@@ -33,6 +33,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 final class SceneDelegate: NSObject, UIWindowSceneDelegate {
     
     private var appCoordinator: Coordinator!
+    private var navigationControllerFactory = dependency.navigationContrllerDependency.navigationControllerFactory
+    private var coordinatorFactory = dependency.coordinatorDependency.coordinatorFactory
+    private var routerFactory = dependency.routerDependency.routerFactory
     
     func scene(
         _ scene: UIScene,
@@ -43,8 +46,9 @@ final class SceneDelegate: NSObject, UIWindowSceneDelegate {
             return
         }
         
-        let navigationController = dependency.navigationControllerFactory.makeNavigationController()
-        let appCoordinator = dependency.coordinatorFactory.makeAppCoordinator(window: window, navigationController: navigationController)
+        let navigationController = navigationControllerFactory.makeNavigationController()
+        let appRouter = routerFactory.makeAppRouter(navigationController)
+        let appCoordinator = coordinatorFactory.makeAppCoordinator(appRouter, window: window)
         self.appCoordinator = appCoordinator
         appCoordinator.start()
     }

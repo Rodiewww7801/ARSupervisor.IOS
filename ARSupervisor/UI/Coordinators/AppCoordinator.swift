@@ -9,21 +9,18 @@ import Foundation
 import UIKit
 
 final class AppCoordinator: Coordinator {
+    private let coordinatorFactory = dependency.coordinatorDependency.coordinatorFactory
     private(set) weak var parent: Coordinator? = nil
     var childCoordinators = [Coordinator]()
     
     private(set) var window: UIWindow
-    private(set) var navigationController: UINavigationController
     private(set) var router: RouterProtocol
     
-    init(window: UIWindow, navigationController: UINavigationController) {
+    init(router: RouterProtocol, window: UIWindow) {
         self.window = window
-        self.navigationController = navigationController
-        
-        self.window.rootViewController = navigationController
+        self.window.rootViewController = router.navigationController
         self.window.makeKeyAndVisible()
-        self.router = dependency.routerFactory.makeAppRouter(navigationController)
-
+        self.router = router
         Logger.logAllocation(for: self)
     }
     
@@ -32,7 +29,7 @@ final class AppCoordinator: Coordinator {
     }
     
     func start() {
-        let coordinator = dependency.coordinatorFactory.makeMainCoordinator(self.router)
+        let coordinator = coordinatorFactory.makeMainCoordinator(self.router)
         coordinator.start()
     }
 }
