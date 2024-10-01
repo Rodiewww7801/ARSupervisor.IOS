@@ -1,0 +1,10 @@
+//
+//  Config.xcconfig
+//  ARSupervisor
+//
+//  Created by Rodion Hladchenko on 29.09.2024.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+ARSBACKEND_API_URL=http:/$()/0.0.0.0:8080
