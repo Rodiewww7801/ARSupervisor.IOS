@@ -22,7 +22,8 @@ final class LoginViewModel: ObservableObject {
         userManager
             .authUser(credentials)
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
+            .sink(receiveCompletion: { [weak self] completion in
+                guard let self else { return }
                 switch completion {
                 case .finished:
                     self.onSuccessLogin = true
@@ -41,7 +42,8 @@ final class LoginViewModel: ObservableObject {
         userManager
             .registerUser(user)
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
+            .sink(receiveCompletion: { [weak self] completion in
+                guard let self else { return }
                 switch completion {
                 case .finished:
                     self.login(email: email, password: password)

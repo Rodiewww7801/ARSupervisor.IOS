@@ -30,6 +30,7 @@ final class AppCoordinator: Coordinator {
     
     func start() {
         let coordinator = coordinatorFactory.makeMainCoordinator(self.router)
+        self.childCoordinators.append(coordinator)
         coordinator.start()
     }
 }

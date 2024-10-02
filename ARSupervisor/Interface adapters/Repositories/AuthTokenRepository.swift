@@ -19,7 +19,7 @@ class AuthTokenRepository: AuthTokenRepositoryProtocol {
             let token = try securedStorage.getValue(for: key.rawValue)
             return token
         } catch {
-            print("[AuthTokenRepository]: \(error)")
+            Logger.log(.error, "\(error)")
         }
         return nil
     }
@@ -28,7 +28,7 @@ class AuthTokenRepository: AuthTokenRepositoryProtocol {
         do {
             try securedStorage.setValue(value, for: key.rawValue)
         } catch {
-            print("[AuthTokenRepository]: \(error)")
+            Logger.log(.error, "\(error)")
         }
     }
     
@@ -36,7 +36,7 @@ class AuthTokenRepository: AuthTokenRepositoryProtocol {
         do {
             try securedStorage.removeValue(for: key.rawValue)
         } catch {
-            print("[AuthTokenRepository]: \(error)")
+            Logger.log(.error, "\(error)")
         }
     }
 }

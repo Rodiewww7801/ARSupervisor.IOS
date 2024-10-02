@@ -19,7 +19,7 @@ class RegisterUserUseCase: RegisterUserUseCaseProtocol {
         let publisher: AnyPublisher<EmptyResponse, HTTPError> = backendService.request(requestModel)
         return publisher
             .mapError { error -> ARSAuthError in
-                return ARSAuthError.UserRegistrationError(message: "\(error)")
+                return ARSAuthError.UserRegistrationError(message: error.localizedDescription)
             }
             .flatMap { dto -> Future<Void, ARSAuthError> in
                 Future<Void, ARSAuthError> { promise in

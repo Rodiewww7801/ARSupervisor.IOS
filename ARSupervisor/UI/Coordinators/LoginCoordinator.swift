@@ -49,9 +49,9 @@ extension LoginCoordinator: RouteFactoryProtocol {
         case .login:
             let viewModel = LoginViewModel()
             viewModel.$onSuccessLogin
-                .sink { success in
+                .sink { [weak self] success in
                     if success {
-                        self._onSuccessLogin.send(Void())
+                        self?._onSuccessLogin.send(Void())
                     }
                 }
                 .store(in: &subscriptions)

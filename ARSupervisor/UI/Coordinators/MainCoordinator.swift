@@ -32,8 +32,11 @@ class MainCoordinator: Coordinator {
     
     func startLoginFlow() {
         let coordinator = coordinatorFactory.makeLoginCoordinator(router)
+        self.childCoordinators.append(coordinator)
         coordinator.onSuccessLogin
-            .sink(receiveValue: { _ in
+            .sink(receiveValue: { [weak self, weak coordinator] _ in
+                guard let self, let coordinator else { return }
+                self.remove(coordinator)
                 self.startSecretFlow()
             })
             .store(in: &subscriptions)
@@ -57,12 +60,10 @@ extension MainCoordinator: RouteFactoryProtocol {
     func view(for route: MainRoute) -> some View {
         switch route {
         case .secret:
-            AnyView {
-                VStack {
-                    Spacer()
-                    Text("Secret view")
-                    Spacer()
-                }
+            VStack {
+                Spacer()
+                Text("Secret view")
+                Spacer()
             }
         }
     }
