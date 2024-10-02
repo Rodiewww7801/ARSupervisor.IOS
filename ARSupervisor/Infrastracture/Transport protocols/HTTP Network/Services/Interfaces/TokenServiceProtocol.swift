@@ -14,6 +14,6 @@ protocol TokenServiceProtocol {
     var refreshToken: EncodedToken? { get }
     var isTokeValid: Bool { get }
     
-    func refreshTokenPublisher() -> AnyPublisher<Void, any Error>
+    func refreshTokenPublisher() -> AnyPublisher<Void, ARSAuthError>
     func decodeToken(_ token: EncodedToken) throws -> Token
 }

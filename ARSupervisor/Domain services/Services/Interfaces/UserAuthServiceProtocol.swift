@@ -8,7 +8,7 @@
 import Combine
 
 protocol UserAuthServiceProtocol {
-    func login(user: User) -> AnyPublisher<Void, any Error>
-    func register(user: User) -> AnyPublisher<Void, any Error>
+    func login(_ credentials: UserCredentials) -> AnyPublisher<Void, ARSAuthError>
+    func register(_ user: User) -> AnyPublisher<Void, ARSAuthError>
     func logout() -> AnyPublisher<Void, any Error>
 }

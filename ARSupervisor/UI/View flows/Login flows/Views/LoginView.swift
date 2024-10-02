@@ -11,7 +11,7 @@ struct LoginView: View {
     
     enum ViewState {
         case login
-        case signup
+        case register
         case none
     }
     
@@ -29,8 +29,8 @@ struct LoginView: View {
                 case .login:
                         AuthView(viewState: $viewState, viewModel: viewModel)
                         .transition(.slide)
-                case .signup:
-                    SignupView(viewState: $viewState, viewModel: viewModel)
+                case .register:
+                    RegisterView(viewState: $viewState, viewModel: viewModel)
                         .transition(.slide)
                 case .none:
                     Button("Log In", action: {
@@ -42,9 +42,9 @@ struct LoginView: View {
                     
                     LoginOrView()
                     
-                    Button("Sign Up", action: {
+                    Button("Register new account", action: {
                         withAnimation {
-                            self.viewState = .signup
+                            self.viewState = .register
                         }
                     })
                     .padding()

@@ -8,5 +8,6 @@
 import Combine
 
 protocol UserManagerProtocol {
-    func authUser(_ user: User) -> AnyPublisher<Void, any Error>
+    func authUser(_ credentials: UserCredentials) -> AnyPublisher<Void, ARSAuthError>
+    func registerUser(_ user: User) -> AnyPublisher<Void, ARSAuthError>
 }

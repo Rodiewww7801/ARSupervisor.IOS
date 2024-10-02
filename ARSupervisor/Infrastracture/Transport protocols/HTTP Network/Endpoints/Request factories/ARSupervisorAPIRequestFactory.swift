@@ -9,7 +9,7 @@ import Foundation
 
 class BackendAPIRequestFactory {
     static var serverAPI: String {
-        ApplicationConfig.getConfigurationValue(for: ApplicationConfigKey.faceLockAPIUrl)
+        ApplicationConfig.getConfigurationValue(for: ApplicationConfigKey.backendAPIURL)
     }
     
     // MARK: - Authentication

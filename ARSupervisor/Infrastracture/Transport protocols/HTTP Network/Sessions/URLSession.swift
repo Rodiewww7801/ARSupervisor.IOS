@@ -8,38 +8,23 @@
 import Foundation
 import Combine
 
-extension URLSession: NetworkSessionProtocol {
+extension URLSession {
+    
+    typealias URLRessponse = (Data, URLResponse)
     
     private var requestBuilder: RequestBuilderProtocol {
         return dependency.networkDependency.makeRequestBuilder()
     }
     
-    func publisher<T>(_ requestModel: RequestModel) -> AnyPublisher<T, Error> where T: Decodable {
+    func publisher(_ requestModel: RequestModel) -> AnyPublisher<URLRessponse, URLError> {
         let request = requestBuilder.buildRequest(requestModel)
+        Logger.log(.httpRequest, "url: \(request.debugDescription), headers: \(request.allHTTPHeaderFields ?? [:]), method: \(request.httpMethod ?? "")")
         let publisher = self.dataTaskPublisher(for: request)
-            .tryMap { result in
-                guard let httpResponse = result.response as? HTTPURLResponse else {
-                    throw HTTPError.requestFailed()
-                }
-                
-                if (200...299) ~= httpResponse.statusCode {
-                    return result.data
-                } else if httpResponse.statusCode == 401 {
-                    throw HTTPError.authenticationError
-                } else if httpResponse.statusCode == 403 {
-                    throw HTTPError.authorizationError
-                } else {
-                    if var error = try? JSONDecoder().decode(HTTPErrorDTO.self, from: result.data) {
-                        error.statusCode = httpResponse.statusCode
-                        throw HTTPError.requestFailed(error)
-                    } else {
-                        throw HTTPError.failed(statusCode: httpResponse.statusCode)
-                    }
-                }
+            .map { (data: Data, response: URLResponse) -> URLRessponse in
+                Logger.log(.httpResponse, "response: \(response.debugDescription)\n data: \(String(data:data, encoding: .utf8) ?? "")")
+                return (data, response)
             }
-            .decode(type: T.self, decoder: JSONDecoder())
             .eraseToAnyPublisher()
-        
         return publisher
     }
 }

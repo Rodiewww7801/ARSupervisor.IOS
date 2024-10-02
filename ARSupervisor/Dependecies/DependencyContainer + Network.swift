@@ -28,9 +28,10 @@ extension DependencyContainerProtected: NetworkDependency {
     
     private func makeBackendNetworkService() -> NetworkServiceProtocol {
         let authTokenRepository = repositoryDependency.makeAuthTokenRepository()
-        let tokenService = TokenService(session: URLSession.shared, authTokenRepository: authTokenRepository)
-        let authSession = AuthSession(session: URLSession.shared, tokenService: tokenService)
-        let backendNetwrokService = BackendNetworkService(authSession: authSession, session: URLSession.shared)
+        let defaultSession = DefaultSession()
+        let tokenService = TokenService(session: defaultSession, authTokenRepository: authTokenRepository)
+        let authSession = AuthSession(session: defaultSession, tokenService: tokenService)
+        let backendNetwrokService = BackendNetworkService(authSession: authSession, session: defaultSession)
         return backendNetwrokService
     }
     

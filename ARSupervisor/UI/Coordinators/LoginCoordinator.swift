@@ -6,15 +6,18 @@
 //
 
 import SwiftUI
+import Combine
 
-enum LoginRoute: NavigationRoute {
-    case login
-}
-
-class LoginCoordinator: Coordinator {
+class LoginCoordinator: Coordinator, LoginCoordinatorOutput {
     private var router: RouterProtocol
     var childCoordinators: [any Coordinator] = []
     
+    // MARK: - Combine publishers
+    private var subscriptions: Set<AnyCancellable> = .init()
+    private let _onSuccessLogin = PassthroughSubject<Void, Never>()
+    lazy var onSuccessLogin: AnyPublisher<Void, Never> = _onSuccessLogin.eraseToAnyPublisher()
+    
+    // MARK: - init
     init(router: RouterProtocol) {
         self.router = router
         Logger.logAllocation(for: self)
@@ -34,13 +37,25 @@ class LoginCoordinator: Coordinator {
     }
 }
 
+// MARK: - Views Factory
+
+enum LoginRoute: NavigationRoute {
+    case login
+}
+
 extension LoginCoordinator: RouteFactoryProtocol {
-    typealias Route = LoginRoute
-    
     func view(for route: LoginRoute) -> some View {
         switch route {
         case .login:
-            LoginView(viewModel: LoginViewModel())
+            let viewModel = LoginViewModel()
+            viewModel.$onSuccessLogin
+                .sink { success in
+                    if success {
+                        self._onSuccessLogin.send(Void())
+                    }
+                }
+                .store(in: &subscriptions)
+            return LoginView(viewModel: viewModel)
         }
     }
 }

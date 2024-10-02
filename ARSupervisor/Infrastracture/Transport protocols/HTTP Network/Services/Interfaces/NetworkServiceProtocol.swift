@@ -8,6 +8,6 @@
 import Combine
 
 protocol NetworkServiceProtocol {
-    func request<T>(_ requestModel: RequestModel) -> AnyPublisher<T, Error> where T: Decodable
-    func authRequest<T>(_ requestModel: RequestModel) -> AnyPublisher<T, Error> where T: Decodable
+    func request<T>(_ requestModel: RequestModel) -> AnyPublisher<T, HTTPError> where T: Decodable
+    func authRequest<T>(_ requestModel: RequestModel) -> AnyPublisher<T, HTTPError> where T : Decodable
 }

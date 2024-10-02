@@ -17,9 +17,7 @@ class JWTDecoder {
         if padding > 0 {
             base64 += String(repeating: "=", count: 4 - padding)
         }
-        
-        let data = Data(base64Encoded: base64)
-        
+    
         return Data(base64Encoded: base64)
     }
 

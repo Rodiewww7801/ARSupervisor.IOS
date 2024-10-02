@@ -7,5 +7,5 @@
 
 struct LoginRequestDTO: Codable {
     let email: String
-    let passwrod: String
+    let password: String
 }

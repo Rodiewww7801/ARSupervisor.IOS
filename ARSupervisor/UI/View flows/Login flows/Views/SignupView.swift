@@ -1,5 +1,5 @@
 //
-//  SignupView.swift
+//  RegisterView.swift
 //  ARSupervisor
 //
 //  Created by Rodion Hladchenko on 28.09.2024.
@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct SignupView: View {
+struct RegisterView: View {
     @State var email: String = ""
     @State var password: String = ""
     @State var confirmPassword: String = ""
     @Binding var viewState: LoginView.ViewState
     @StateObject var viewModel: LoginViewModel
     
-    var signUpDisabled: Bool {
+    var registerDisabled: Bool {
         return (email.isEmpty  || password.isEmpty) || (password != confirmPassword)
     }
     
@@ -37,23 +37,17 @@ struct SignupView: View {
                 ProgressView()
             }
             
-            if viewModel.isNotValidShown {
-                Text("Incorrect email or password.\nTry again")
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
                     .multilineTextAlignment(.center)
                     .foregroundColor(.red)
                     .padding()
             }
             
-            Button("Create account") {
+            Button("Register account") {
                 hideKeyboard()
-                viewModel.login(completion: { success in
-                    if success {
-                        withAnimation {
-                            //router.currentView = .main
-                        }
-                    }
-                })
-            }.disabled(self.signUpDisabled)
+                viewModel.register(email: self.email, password: self.password)
+            }.disabled(self.registerDisabled)
                 .padding()
             
             LoginOrView()

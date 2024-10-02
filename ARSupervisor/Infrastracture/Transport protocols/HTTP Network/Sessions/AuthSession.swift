@@ -21,18 +21,18 @@ class AuthSession: NetworkSessionProtocol {
         self.tokenService = tokenService
     }
     
-    func publisher<T>(_ requestModel: RequestModel) -> AnyPublisher<T, any Error> where T : Decodable {
+    func publisher<T>(_ requestModel: RequestModel) -> AnyPublisher<T, any Error> where T: Decodable {
         self.addAuthHeaders(from: &requestModel.headers)
-        let requestPublisher: AnyPublisher<T, any Error> = session.publisher(requestModel).eraseToAnyPublisher()
+        let requestPublisher: AnyPublisher<T, Error> = session.publisher(requestModel)
         return requestPublisher
-            .catch { error -> AnyPublisher<T, any Error> in
+            .catch { error -> AnyPublisher<T, Error> in
                 self.tokenService.refreshTokenPublisher()
-                    .flatMap { result in
-                        return requestPublisher
+                    .mapError { $0 as Error }
+                    .flatMap { () -> AnyPublisher<T, Error> in
+                        return self.session.publisher(requestModel)
                     }
                     .eraseToAnyPublisher()
-            }
-            .eraseToAnyPublisher()
+            }.eraseToAnyPublisher()
     }
     
     func isSessionValid() -> Bool {

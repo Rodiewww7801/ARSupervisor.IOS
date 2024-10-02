@@ -17,16 +17,19 @@ class LoginUserUseCase: LoginUserUseCaseProtocol {
         self.authTokenRepository = authTokenRepository
     }
     
-    func execute(_ dto: LoginRequestDTO) -> AnyPublisher<Void, any Error> {
+    func execute(_ dto: LoginRequestDTO) -> AnyPublisher<Void, ARSAuthError> {
         let requestModel = BackendAPIRequestFactory.login(with: dto)
-        let publisher: AnyPublisher<TokensResponseDTO, any Error> = backendService.request(requestModel)
+        let publisher: AnyPublisher<TokensResponseDTO, HTTPError> = backendService.request(requestModel)
         return publisher
-            .flatMap { dto -> AnyPublisher<Void, any Error> in
-                Future<Void, any Error> { promise in
+            .mapError { error -> ARSAuthError in
+                return ARSAuthError.UserAuthenticationError(message: error.customDescription)
+            }
+            .flatMap { dto -> Future<Void, ARSAuthError> in
+                Future<Void, ARSAuthError> { promise in
                     self.authTokenRepository.setToken(dto.accessToken, for: .accessTokenKey)
                     self.authTokenRepository.setToken(dto.refreshToken, for: .accessTokenKey)
                     promise(.success( Void() ))
-                }.eraseToAnyPublisher()
+                }
             }.eraseToAnyPublisher()
     }
 }

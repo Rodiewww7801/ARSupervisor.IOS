@@ -1,5 +1,5 @@
 //
-//  DependencyContainer + Services.swift
+//  DependencyContainer + DomainService.swift
 //  ARSupervisor
 //
 //  Created by Rodion Hladchenko on 01.10.2024.
@@ -14,8 +14,8 @@ extension DependencyContainerProtected: DomainServiceDependency {
         return UserAuthService(
             loginUserUseCase: LoginUserUseCase(
                 backendService: networkDependency.networkManager.backendNetworkService,
-                authTokenRepository: repositoryDependency.makeAuthTokenRepository()
-            )
+                authTokenRepository: repositoryDependency.makeAuthTokenRepository()),
+            registerUserUseCase: RegisterUserUseCase(backendService: networkDependency.networkManager.backendNetworkService)
         )
     }
 }

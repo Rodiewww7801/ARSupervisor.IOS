@@ -8,7 +8,7 @@
 import Foundation
 
 enum ApplicationConfigKey {
-    static let faceLockAPIUrl = "ARSUPERVISOR_API_URL"
+    static let backendAPIURL = "ARSBACKEND_API_URL"
 }
 
 class ApplicationConfig {

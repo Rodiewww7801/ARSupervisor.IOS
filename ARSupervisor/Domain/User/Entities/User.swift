@@ -6,13 +6,11 @@
 //
 
 class User {
-    let info: UserInfo
-    let accessLevel: UserAccessLevel
     let credentials: UserCredentials
+    var info: UserInfo?
+    var accessLevel: UserAccessLevel = UserAccessLevel(securityLevel: 0)
     
-    init(credentials: UserCredentials, info: UserInfo, accessLevel: UserAccessLevel) {
+    init(credentials: UserCredentials) {
         self.credentials = credentials
-        self.info = info
-        self.accessLevel = accessLevel
     }
 }

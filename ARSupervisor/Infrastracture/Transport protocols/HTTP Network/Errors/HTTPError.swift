@@ -14,13 +14,14 @@ struct HTTPErrorDTO: Decodable {
 
 enum HTTPError: Error {
     case requestFailed(_ error: HTTPErrorDTO? = nil)
-    case normalError(Error)
+    case anyError(Error)
     case authenticationError
     case authorizationError
     case tokenIsMissing
+    case decodeError(_ message: String)
     case failed(statusCode: Int)
 
-    var errorDescription: String? {
+    var customDescription: String {
         switch self {
         case .requestFailed(let error):
             if let error, let statusCode = error.statusCode {
@@ -28,7 +29,7 @@ enum HTTPError: Error {
             } else {
                 return "Request failed"
             }
-        case .normalError(let error):
+        case .anyError(let error):
             return error.localizedDescription
         case .authenticationError:
             return "Unauthorized"
@@ -36,6 +37,8 @@ enum HTTPError: Error {
             return "Forbidden"
         case .tokenIsMissing:
             return "Token is missing"
+        case .decodeError(let message):
+            return message
         case .failed(let statusCode):
             return  "Request failed with status code: \(statusCode)"
         }

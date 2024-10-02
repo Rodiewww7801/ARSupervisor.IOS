@@ -25,10 +25,10 @@ class TokenService: TokenServiceProtocol {
         self.authTokenRepository = authTokenRepository
     }
     
-    func refreshTokenPublisher() -> AnyPublisher<Void, any Error> {
+    func refreshTokenPublisher() -> AnyPublisher<Void, ARSAuthError> {
         guard let refreshToken = authTokenRepository.getToken(for: .refreshTokenKey) else {
-            return Future<Void, any Error> { promise in
-                promise(.failure(HTTPError.tokenIsMissing))
+            return Future<Void, ARSAuthError> { promise in
+                promise(.failure(ARSAuthError.FailedToRetriveToken(message: "Refresh token is missing")))
             }.eraseToAnyPublisher()
         }
         
@@ -37,13 +37,20 @@ class TokenService: TokenServiceProtocol {
         let refreshTokenRequestPublisher: AnyPublisher<TokensResponseDTO, any Error> = session.publisher(requestModel)
         
         return refreshTokenRequestPublisher
-            .flatMap({ dto -> AnyPublisher<Void, any Error> in
+            .mapError { error -> ARSAuthError in
+                if let error = error as? HTTPError {
+                    return ARSAuthError.FailedToRetriveToken(message: error.customDescription)
+                } else {
+                    return ARSAuthError.FailedToRetriveToken(message: error.localizedDescription)
+                }
+            }
+            .flatMap { dto -> Future<Void, ARSAuthError> in
                 Future { promise in
                     self.authTokenRepository.setToken(dto.accessToken, for: .accessTokenKey)
                     self.authTokenRepository.setToken(dto.refreshToken, for: .refreshTokenKey)
                     promise(.success( () ))
-                }.eraseToAnyPublisher()
-            }).eraseToAnyPublisher()
+                }
+            }.eraseToAnyPublisher()
     }
     
     var isTokeValid: Bool {
@@ -69,5 +76,4 @@ class TokenService: TokenServiceProtocol {
         }
         return token!
     }
-    
 }

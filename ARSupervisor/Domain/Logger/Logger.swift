@@ -5,11 +5,15 @@
 //  Created by Rodion Hladchenko on 28.09.2024.
 //
 
+import Foundation
+
 class Logger {
     enum Level {
         case verbose
         case error
         case info
+        case httpRequest
+        case httpResponse
         case memmoryInfo
         
         func description() -> String {
@@ -22,6 +26,10 @@ class Logger {
                 return "Info"
             case .memmoryInfo:
                 return "Memmory"
+            case .httpRequest:
+                return "HTTP Request: \(Date())"
+            case .httpResponse:
+                return "HTTP Response: \(Date())"
             }
         }
     }

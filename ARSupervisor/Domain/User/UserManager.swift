@@ -14,7 +14,11 @@ class UserManager: UserManagerProtocol {
         self.userAuthService = userAuthService
     }
     
-    func authUser(_ user: User) -> AnyPublisher<Void, any Error> {
-        self.userAuthService.login(user: user)
+    func authUser(_ credentials: UserCredentials) -> AnyPublisher<Void, ARSAuthError> {
+        self.userAuthService.login(credentials)
+    }
+    
+    func registerUser(_ user: User) -> AnyPublisher<Void, ARSAuthError> {
+        self.userAuthService.register(user)
     }
 }

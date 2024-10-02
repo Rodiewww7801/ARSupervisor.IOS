@@ -15,6 +15,7 @@ public protocol RouterProtocol {
 
     func push(_ module: Presentable, animated: Bool)
     func push(_ modules: [Presentable], animated: Bool)
+    func setRootModule(_ module: Presentable, animated: Bool)
     func present(_ module: Presentable, withDelegate delegate: UIViewControllerTransitioningDelegate?, style: UIModalPresentationStyle, animated: Bool)
     func pop(animated: Bool)
     func popToRoot(animated: Bool)
@@ -29,6 +30,10 @@ public extension RouterProtocol {
     func push(_ modules: [Presentable], animated: Bool) {
         let viewControllers = self.navigationController.viewControllers
         navigationController.setViewControllers(viewControllers + modules, animated: animated)
+    }
+    
+    func setRootModule(_ module: Presentable, animated: Bool) {
+        navigationController.setViewControllers([module], animated: animated)
     }
 
     func present(_ module: Presentable, withDelegate delegate: UIViewControllerTransitioningDelegate? = nil, style: UIModalPresentationStyle = .fullScreen, animated: Bool) {

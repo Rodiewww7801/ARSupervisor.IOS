@@ -9,7 +9,7 @@ protocol CoordinatorDependency {
     var coordinatorFactory: CoordinatorFactoryProtocol { get }
 }
 
-extension DependencyContainerProtected: CoordinatorDependency {    
+extension DependencyContainerProtected: CoordinatorDependency {
     var coordinatorFactory: CoordinatorFactoryProtocol {
         return CoordinatorFactory()
     }

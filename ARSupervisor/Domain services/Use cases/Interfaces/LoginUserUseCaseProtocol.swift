@@ -8,5 +8,5 @@
 import Combine
 
 protocol LoginUserUseCaseProtocol {
-    func execute(_ parameters: LoginRequestDTO) -> AnyPublisher<Void, any Error>
+    func execute(_ parameters: LoginRequestDTO) -> AnyPublisher<Void, ARSAuthError>
 }

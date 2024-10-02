@@ -22,6 +22,8 @@ protocol DependencyContainer {
     var routerDependency: RouterDependency { get }
     var navigationContrllerDependency: NavigationContrllerDependency { get }
     var coordinatorDependency: CoordinatorDependency { get }
+    var domainServiceDependency: DomainServiceDependency { get }
+    var domainDependency: DomainDependency { get }
 }
 
 // protected because it incapsulate private property for inheritance
@@ -31,6 +33,7 @@ class DependencyContainerProtected: DependencyContainer {
     // MARK: - Private properties but accessable for inheritens
     var _networkManager: NetworkManagerProtocol!
     var _keychainStorage: SecureStorageProtocol!
+    var _userManager: UserManagerProtocol!
     
     // MARK: - Namespacing for dependency
     var networkDependency: NetworkDependency { self }
@@ -39,4 +42,6 @@ class DependencyContainerProtected: DependencyContainer {
     var routerDependency: RouterDependency { self }
     var navigationContrllerDependency: NavigationContrllerDependency { self }
     var coordinatorDependency: CoordinatorDependency { self }
+    var domainServiceDependency: DomainServiceDependency { self }
+    var domainDependency: DomainDependency { self }
 }

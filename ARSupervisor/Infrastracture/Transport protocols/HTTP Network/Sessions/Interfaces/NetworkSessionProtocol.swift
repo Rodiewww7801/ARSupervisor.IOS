@@ -9,5 +9,5 @@ import Foundation
 import Combine
 
 protocol NetworkSessionProtocol {
-    func publisher<T>(_ requestModel: RequestModel) -> AnyPublisher<T, Error> where T: Decodable 
+    func publisher<T>(_ requestModel: RequestModel) -> AnyPublisher<T, any Error> where T: Decodable
 }

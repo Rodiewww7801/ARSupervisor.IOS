@@ -21,7 +21,7 @@ class CoordinatorFactory: CoordinatorFactoryProtocol {
         return MainCoordinator(router: router)
     }
     
-    func makeLoginCoordinator(_ router: any RouterProtocol) -> any Coordinator {
+    func makeLoginCoordinator(_ router: any RouterProtocol) -> Coordinator & LoginCoordinatorOutput {
         return LoginCoordinator(router: router)
     }
 }
