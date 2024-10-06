@@ -10,15 +10,15 @@ import SwiftUI
 /// Provide route for custom `NavigationController` to  select type of animated transition in `NavigationRoute`.
 /// Not nessessary to implement. Used only for animation delegating in custom `NavigationController`.
 public protocol RouteProvider {
-    var route: NavigationRoute? { get }
+    var route: (any NavigationRoute)? { get }
 }
 
 // MARK: - Example of implementation
 
 public class RouteHostingController<Content: View>: UIHostingController<Content>, RouteProvider {
-    public let route: NavigationRoute?
+    public let route: (any NavigationRoute)?
     
-    init(route: NavigationRoute, rootView: Content) {
+    init(route: any NavigationRoute, rootView: Content) {
         self.route = route
         super.init(rootView: rootView)
     }
@@ -29,9 +29,9 @@ public class RouteHostingController<Content: View>: UIHostingController<Content>
 }
 
 public class ViewController: UIViewController, RouteProvider {
-    public var route: NavigationRoute? = nil
+    public var route: (any NavigationRoute)? = nil
     
-    public init(route: NavigationRoute? = nil) {
+    public init(route: (any NavigationRoute)? = nil) {
         self.route = route
         super.init(nibName: nil, bundle: nil)
     }

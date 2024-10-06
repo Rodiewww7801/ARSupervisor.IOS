@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-var dependency: DependencyContainer = DependencyContainerProtected.shared
+let dependency: DependencyContainer = DependencyContainerProtected.shared
 
 @main
 struct SwiftCoordinatorApp: App {

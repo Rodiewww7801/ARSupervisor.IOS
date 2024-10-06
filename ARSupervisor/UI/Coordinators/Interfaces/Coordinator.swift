@@ -12,7 +12,7 @@ import UIKit
 public protocol Coordinator: AnyObject {
     var childCoordinators: [Coordinator] { get set }
     func start()
-    func start(for route: [NavigationRoute])
+    func start(for route: [any NavigationRoute])
     func add(child: Coordinator)
     func remove(_ coordinator: Coordinator)
     func remove()
@@ -39,5 +39,5 @@ public extension Coordinator {
         childCoordinators.removeAll()
     }
     
-    func start(for route: [NavigationRoute]) { }
+    func start(for route: [any NavigationRoute]) { }
 }

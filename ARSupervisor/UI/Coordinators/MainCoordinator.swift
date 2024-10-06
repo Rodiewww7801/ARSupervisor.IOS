@@ -8,6 +8,11 @@
 import SwiftUI
 import Combine
 
+enum MainRoute: NavigationRoute {
+    case login
+    case main
+}
+
 class MainCoordinator: Coordinator {
     private var coordinatorFactory = dependency.coordinatorDependency.coordinatorFactory
     private var router: RouterProtocol
@@ -37,34 +42,15 @@ class MainCoordinator: Coordinator {
             .sink(receiveValue: { [weak self, weak coordinator] _ in
                 guard let self, let coordinator else { return }
                 self.remove(coordinator)
-                self.startSecretFlow()
+                self.startMainFlow()
             })
             .store(in: &subscriptions)
         coordinator.start()
     }
     
-    func startSecretFlow() {
-        let view = factory(for: .secret)
-        router.setRootModule(view, animated: true)
-    }
-}
-
-// MARK: - Views Factory
-
-enum MainRoute: NavigationRoute {
-    case secret
-}
-
-extension MainCoordinator: RouteFactoryProtocol {
-    @ViewBuilder
-    func view(for route: MainRoute) -> some View {
-        switch route {
-        case .secret:
-            VStack {
-                Spacer()
-                Text("Secret view")
-                Spacer()
-            }
-        }
+    func startMainFlow() {
+        let coordinator = MainTabBarCoordinator(self.router)
+        self.childCoordinators.append(coordinator)
+        coordinator.start()
     }
 }

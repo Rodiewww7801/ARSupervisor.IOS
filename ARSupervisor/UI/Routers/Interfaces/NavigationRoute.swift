@@ -8,7 +8,7 @@
 import UIKit
 
 /// `NavigationRoute` Need to segregate views by abstract type.
-public protocol NavigationRoute {
+public protocol NavigationRoute: Equatable {
     /// Coordinates a transition between ViewControllers
     var transitionType: AnimatedTransitioning? { get }
 }
