@@ -10,6 +10,7 @@ import UIKit
 public typealias Presentable = UIViewController & RouteProvider
 
 /// `Router` encapsulate specific navigation logic.
+@MainActor
 public protocol RouterProtocol {
     var navigationController: UINavigationController { get }
 

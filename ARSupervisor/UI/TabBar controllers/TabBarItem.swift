@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 class TabBarPresentable<Route: NavigationRoute> {
     var viewController: Presentable!
     var item: UITabBarItem {

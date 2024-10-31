@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 protocol RouterFactoryProtocol {
     func makeAppRouter(_ navigationController: UINavigationController) -> RouterProtocol
 }

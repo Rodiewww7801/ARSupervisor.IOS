@@ -7,6 +7,7 @@
 
 import Combine
 
+@MainActor
 protocol LoginCoordinatorOutput {
     var onSuccessLogin: AnyPublisher<Void, Never> { get }
 }

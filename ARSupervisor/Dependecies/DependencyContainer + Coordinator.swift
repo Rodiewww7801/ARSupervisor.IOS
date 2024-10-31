@@ -5,6 +5,7 @@
 //  Created by Rodion Hladchenko on 05.09.2024.
 //
 
+@MainActor
 protocol CoordinatorDependency {
     var coordinatorFactory: CoordinatorFactoryProtocol { get }
 }

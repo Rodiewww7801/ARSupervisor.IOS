@@ -9,6 +9,7 @@ import UIKit
 
 ///  `Coordinator`  is responsible for controlling the navigation flow of the application.
 ///   It manages which view controllers should be presented or pushed and manage life cycle of other child coordinators
+@MainActor
 public protocol Coordinator: AnyObject {
     var childCoordinators: [Coordinator] { get set }
     func start()

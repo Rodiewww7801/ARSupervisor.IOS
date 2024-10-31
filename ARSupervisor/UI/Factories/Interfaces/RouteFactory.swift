@@ -8,6 +8,7 @@
 import SwiftUI
 
 /// Obliges a class that implements this protocol to be responsible for creating a view use Route type
+@MainActor
 public protocol RouteFactoryProtocol {
     associatedtype Route: NavigationRoute
     associatedtype V

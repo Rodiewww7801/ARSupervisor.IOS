@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 protocol CoordinatorFactoryProtocol {
     var appCoordinator: Coordinator? { get }
     func makeAppCoordinator(_ router: RouterProtocol, window: UIWindow) -> Coordinator

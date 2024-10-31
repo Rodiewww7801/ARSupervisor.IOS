@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 internal class NavigationControllerTransitionHandler {
     func navigationController(
         _ navigationController: UINavigationController,

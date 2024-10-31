@@ -8,6 +8,7 @@
 import UIKit
 
 /// `NavigationRoute` Need to segregate views by abstract type.
+@MainActor
 public protocol NavigationRoute: Equatable {
     /// Coordinates a transition between ViewControllers
     var transitionType: AnimatedTransitioning? { get }
@@ -19,6 +20,7 @@ public extension NavigationRoute {
     }
 }
 
+@MainActor
 public struct AnimatedTransitioning {
     var transitionTo: UIViewControllerAnimatedTransitioning? = nil
     var transitionFrom: UIViewControllerAnimatedTransitioning? = nil

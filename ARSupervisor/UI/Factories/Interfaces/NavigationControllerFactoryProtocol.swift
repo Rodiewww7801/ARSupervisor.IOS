@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 public protocol NavigationControllerFactoryProtocol {
     func makeNavigationController(_ route: (any NavigationRoute), delegate: UINavigationControllerDelegate) -> UINavigationController & RouteProvider
     func makeNavigationController(_ route: (any NavigationRoute)) -> UINavigationController & RouteProvider

@@ -9,6 +9,7 @@ import SwiftUI
 
 /// Provide route for custom `NavigationController` to  select type of animated transition in `NavigationRoute`.
 /// Not nessessary to implement. Used only for animation delegating in custom `NavigationController`.
+@MainActor
 public protocol RouteProvider {
     var route: (any NavigationRoute)? { get }
 }

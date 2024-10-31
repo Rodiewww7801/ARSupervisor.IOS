@@ -13,7 +13,7 @@ import Foundation
 /// `DependencyContainer` helps the app by splitting it into loosely-coupled components, making testing and maintenance easier.
 /// In `DependencyContainer`, components can be easily developed due to the substitution of protocol implementations.
 
-protocol DependencyContainer {
+protocol DependencyContainer: Sendable {
     static var shared: DependencyContainer { get }
     
     var networkDependency: NetworkDependency { get }
@@ -27,13 +27,13 @@ protocol DependencyContainer {
 }
 
 // protected because it incapsulate private property for inheritance
-class DependencyContainerProtected: DependencyContainer {
+final class DependencyContainerProtected: DependencyContainer {
     static let shared: DependencyContainer = DependencyContainerProtected()
     
     // MARK: - Private properties but accessable for inheritens
-    var _networkManager: NetworkManagerProtocol!
-    var _keychainStorage: SecureStorageProtocol!
-    var _userManager: UserManagerProtocol!
+    nonisolated(unsafe) var _networkManager: NetworkManagerProtocol!
+    nonisolated(unsafe) var _keychainStorage: SecureStorageProtocol!
+    nonisolated(unsafe) var _userManager: UserManagerProtocol!
     
     // MARK: - Namespacing for dependency
     var networkDependency: NetworkDependency { self }
