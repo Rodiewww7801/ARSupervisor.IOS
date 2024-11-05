@@ -19,15 +19,16 @@ struct LoginView: View {
     @StateObject var viewModel: LoginViewModel
     
     var body: some View {
-        VStack {
-            Image("logo")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 250)
-            
+        ZStack {
+            VStack {
+                Image("logo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 250)
+                
                 switch viewState {
                 case .login:
-                        AuthView(viewState: $viewState, viewModel: viewModel)
+                    AuthView(viewState: $viewState, viewModel: viewModel)
                         .transition(.slide)
                 case .register:
                     RegisterView(viewState: $viewState, viewModel: viewModel)
@@ -49,7 +50,12 @@ struct LoginView: View {
                     })
                     .padding()
                 }
-        }
+            }
+            
+            if viewModel.showProgressView {
+                LoadingView()
+            }
+        }.disabled(viewModel.showProgressView)
     }
 }
 

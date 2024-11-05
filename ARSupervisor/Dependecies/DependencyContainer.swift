@@ -34,6 +34,7 @@ final class DependencyContainerProtected: DependencyContainer {
     nonisolated(unsafe) var _networkManager: NetworkManagerProtocol!
     nonisolated(unsafe) var _keychainStorage: SecureStorageProtocol!
     nonisolated(unsafe) var _userManager: UserManagerProtocol!
+    nonisolated(unsafe) var _cameraManager: CameraManagerProtocol!
     
     // MARK: - Namespacing for dependency
     var networkDependency: NetworkDependency { self }

@@ -22,8 +22,6 @@ class PlainDataCoordinator: Coordinator {
     func start() {
         let view = self.factory(for: .plainData)
         self.router.setRootModule(view, animated: true)
-        let view2 = self.factory(for: .plainData)
-        self.router.push(view2, animated: true)
     }
 }
 

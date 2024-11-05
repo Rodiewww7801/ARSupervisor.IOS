@@ -21,7 +21,6 @@ where Route: NavigationRoute & CaseIterable,
     private let _onDidSelecteTab: CurrentValueSubject<Route, Never>
     lazy var onDidSelecteTab: AnyPublisher<Route, Never> = _onDidSelecteTab.eraseToAnyPublisher()
     
-    
     // MARK: - init
     
     init(selectedRoute: Route, factory: Factory) {
@@ -37,6 +36,17 @@ where Route: NavigationRoute & CaseIterable,
         self.viewControllers = items.map { $0.viewController }
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.selectRoute(selectedRoute)
+    }
+    
+    override func loadView() {
+        super.loadView()
+        
+        let transparentAppearence = UITabBarAppearance()
+        transparentAppearence.configureWithTransparentBackground()
+        transparentAppearence.backgroundColor = .clear
+        transparentAppearence.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        UITabBar.appearance().standardAppearance = transparentAppearence
+        UITabBar.appearance().scrollEdgeAppearance = transparentAppearence
     }
     
     func selectRoute(_ route: Route) {

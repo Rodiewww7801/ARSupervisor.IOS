@@ -1,5 +1,5 @@
 //
-//  PlainDataView.swift
+//  ARMainView.swift
 //  ARSupervisor
 //
 //  Created by Rodion Hladchenko on 05.10.2024.
@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct PlainDataView: View {
+struct ARView: View {
     var body: some View {
         VStack {
-            Text("Plain data")
             Spacer()
+            Text("ARView")
         }
         .frame(maxWidth: .infinity)
-        .background(Color.red)
+        .background(Color.green)
     }
 }

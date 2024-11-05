@@ -33,12 +33,10 @@ struct RegisterView: View {
             
             Divider()
             
-            if viewModel.showProgressView {
-                ProgressView()
-            }
-            
             if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)
+                    .lineLimit(3)
+                    .fixedSize(horizontal: false, vertical: true)
                     .multilineTextAlignment(.center)
                     .foregroundColor(.red)
                     .padding()
@@ -62,7 +60,5 @@ struct RegisterView: View {
             
         }.textFieldStyle(.plain)
             .autocapitalization(.none)
-            .padding()
-            .disabled(viewModel.showProgressView)
     }
 }

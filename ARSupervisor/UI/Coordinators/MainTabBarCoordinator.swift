@@ -49,7 +49,7 @@ class MainTabBarCoordinator: Coordinator {
     }
     
     private func startPlainData() {
-        guard childCoordinators.contains(where: { $0 is PlainDataCoordinator}) == false else { return }
+        guard childCoordinators.contains(where: { $0 is PlainDataCoordinator }) == false else { return }
         guard let nc = self.controller.getController(for: .plainDataTab) as? UINavigationController else {
             return
         }
@@ -60,18 +60,18 @@ class MainTabBarCoordinator: Coordinator {
     }
     
     private func startARView() {
-        guard childCoordinators.contains(where: { $0 is ARPresentationCoordinator}) == false else { return }
+        guard childCoordinators.contains(where: { $0 is ARSceneCoordinator }) == false else { return }
         guard let nc = self.controller.getController(for: .arViewPresentationTab) as? UINavigationController else {
             return
         }
         let router = Router(nc)
-        let coordinator = ARPresentationCoordinator(router)
+        let coordinator = ARSceneCoordinator(router)
         self.childCoordinators.append(coordinator)
         coordinator.start()
     }
     
     private func startProfile() {
-        guard childCoordinators.contains(where: { $0 is UserProfileCoordinator}) == false else { return }
+        guard childCoordinators.contains(where: { $0 is UserProfileCoordinator }) == false else { return }
         guard let nc = self.controller.getController(for: .profileTab) as? UINavigationController else {
             return
         }

@@ -7,6 +7,7 @@
 
 protocol DomainDependency {
     var userManager: UserManagerProtocol { get }
+    var cameraManager: CameraManagerProtocol { get }
 }
 
 extension DependencyContainerProtected: DomainDependency  {
@@ -21,5 +22,18 @@ extension DependencyContainerProtected: DomainDependency  {
     
     private func makeUserManager() -> UserManagerProtocol {
         UserManager(userAuthService: domainServiceDependency.makeUserAuthService())
+    }
+    
+    var cameraManager: CameraManagerProtocol {
+        if let _cameraManager {
+            return _cameraManager
+        }
+        
+        _cameraManager = makeCameraManager()
+        return _cameraManager
+    }
+    
+    private func makeCameraManager() -> CameraManagerProtocol {
+        CameraManager()
     }
 }
