@@ -7,10 +7,6 @@
 
 import Foundation
 
-public protocol SecureStorageQueryable {
-    var query: [String: Any] { get }
-}
-
 enum KeychainStorageKeys: String {
     case accessTokenKey = "AccessTokenKey"
     case refreshTokenKey = "RefreshTokenKey"
@@ -23,13 +19,13 @@ struct KeychainStorage: SecureStorageProtocol {
         self.secureStorageQueryable = secureStorageQueryable
     }
     
-    func setValue(_ value: String, for userAccount: String) throws {
+    func setValue(_ value: String, for key: String) throws {
         guard let encodedPassword = value.data(using: .utf8) else {
             throw SecureStorageError.conversionError
         }
         
         var query = secureStorageQueryable.query
-        query[String(kSecAttrAccount)] = userAccount
+        query[String(kSecAttrService)] = key
         
         var status = SecItemCopyMatching(query as CFDictionary, nil)
         switch status {
@@ -54,12 +50,12 @@ struct KeychainStorage: SecureStorageProtocol {
         }
     }
     
-    func getValue(for userAccount: String) throws -> String? {
+    func getValue(for key: String) throws -> String? {
         var query = secureStorageQueryable.query
         query[String(kSecMatchLimit)] = kSecMatchLimitOne
         query[String(kSecReturnAttributes)] = kCFBooleanTrue
         query[String(kSecReturnData)] = kCFBooleanTrue
-        query[String(kSecAttrAccount)] = userAccount
+        query[String(kSecAttrService)] = key
         
         var queryResult: AnyObject?
         let status = withUnsafeMutablePointer(to: &queryResult) {
@@ -83,9 +79,9 @@ struct KeychainStorage: SecureStorageProtocol {
         }
     }
     
-    func removeValue(for userAccount: String) throws {
+    func removeValue(for key: String) throws {
         var query = secureStorageQueryable.query
-        query[String(kSecAttrAccount)] = userAccount
+        query[String(kSecAttrService)] = key
         
         let status = SecItemDelete(query as CFDictionary)
         guard status == errSecSuccess || status == errSecItemNotFound else {

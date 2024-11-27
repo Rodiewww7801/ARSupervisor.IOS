@@ -60,5 +60,6 @@ struct RegisterView: View {
             
         }.textFieldStyle(.plain)
             .autocapitalization(.none)
+            .padding()
     }
 }

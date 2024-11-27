@@ -7,6 +7,10 @@
 
 import Foundation
 
+public protocol SecureStorageQueryable {
+    var query: [String: Any] { get }
+}
+
 public struct GenericPasswordQueryable {
     let service: String
     let accessGroup: String?

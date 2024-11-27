@@ -1,5 +1,5 @@
 //
-//  RawDataDTO.swift
+//  AssetDataDTO.swift
 //  ARSupervisor
 //
 //  Created by rodiewww7801_temp on 05.11.2024.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RawDataType: Decodable {
+struct AssetDataType: Decodable {
     let type: DataType
     
     enum DataType: String, Decodable {
@@ -18,7 +18,7 @@ struct RawDataType: Decodable {
             let container = try decoder.singleValueContainer()
             let rawValue = try container.decode(String.self)
             guard let _self =  DataType(rawValue: rawValue) else {
-                throw DecodingError.keyNotFound(RawDataType.CodingKeys.type, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Unknown DataType"))
+                throw DecodingError.keyNotFound(AssetDataType.CodingKeys.type, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Unknown DataType"))
             }
             self = _self
         }
@@ -29,23 +29,21 @@ struct RawDataType: Decodable {
     }
 }
 
-struct RawDataDTO<T: Decodable>: Decodable {
+struct AssetDataDTO<T: Decodable>: Decodable {
     let value: T
-    let assetId: String
     
     enum CodingKeys: String, CodingKey {
         case value = "data_value"
-        case assetId = "asset_id"
     }
 }
 
 // MARK: - Data types
 
-struct RawChartData: Decodable {
+struct AssetChartData: Decodable {
     let x: Double
     let y: Double
 }
 
-struct RawPlainData: Decodable {
+struct AssetPlainData: Decodable {
     let value: Double?
 }
