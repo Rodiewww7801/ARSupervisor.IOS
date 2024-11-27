@@ -8,7 +8,7 @@
 import Foundation
 
 enum ApplicationConfigKey {
-    static let backendAPIURL = "ARSBACKEND_API_URL"
+    static let backendAPIURL = "arsBackendAPIURL"
 }
 
 class ApplicationConfig {
