@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 
 extension URLSession {
     
@@ -16,15 +15,11 @@ extension URLSession {
         return dependency.networkDependency.makeRequestBuilder()
     }
     
-    func publisher(_ requestModel: RequestModel) -> AnyPublisher<URLRessponse, URLError> {
+    func request(_ requestModel: RequestModel) async throws -> URLRessponse {
         let request = requestBuilder.buildRequest(requestModel)
         Logger.log(.httpRequest, "url: \(request.debugDescription), headers: \(request.allHTTPHeaderFields ?? [:]), method: \(request.httpMethod ?? "")")
-        let publisher = self.dataTaskPublisher(for: request)
-            .map { (data: Data, response: URLResponse) -> URLRessponse in
-                Logger.log(.httpResponse, "response: \(response.debugDescription)\n data: \(String(data:data, encoding: .utf8) ?? "")")
-                return (data, response)
-            }
-            .eraseToAnyPublisher()
-        return publisher
+        let (data, response) = try await self.data(for: request)
+        Logger.log(.httpResponse, "response: \(response.debugDescription)\n data: \(String(data:data, encoding: .utf8) ?? "")")
+        return (data, response)
     }
 }

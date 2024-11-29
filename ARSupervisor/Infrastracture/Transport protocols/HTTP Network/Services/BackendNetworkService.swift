@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 
 class BackendNetworkService: NetworkServiceProtocol {
     let authSession: NetworkSessionProtocol
@@ -19,28 +18,28 @@ class BackendNetworkService: NetworkServiceProtocol {
         self.session = session
     }
     
-    func request<T>(_ requestModel: RequestModel) -> AnyPublisher<T, HTTPError> where T: Decodable {
+    func request<T>(_ requestModel: RequestModel) async throws -> T where T: Decodable {
         makeHttpHeaders(from: &requestModel.headers)
-        return session.publisher(requestModel)
-            .mapError{ error -> HTTPError in
-                if let error = error as? HTTPError {
-                    return error
-                } else {
-                    return HTTPError.anyError(error)
-                }
-            }.eraseToAnyPublisher()
+        do {
+            let response: T = try await session.request(requestModel)
+            return response
+        } catch let error as HTTPError {
+            throw error
+        } catch {
+            throw HTTPError.anyError(error)
+        }
     }
     
-    func authRequest<T>(_ requestModel: RequestModel) -> AnyPublisher<T, HTTPError>  where T: Decodable {
+    func authRequest<T>(_ requestModel: RequestModel) async throws -> T where T: Decodable {
         makeHttpHeaders(from: &requestModel.headers)
-        return authSession.publisher(requestModel)
-            .mapError { error -> HTTPError in
-                if let error = error as? HTTPError {
-                    return error
-                } else {
-                    return HTTPError.anyError(error)
-                }
-            }.eraseToAnyPublisher()
+        do {
+            let response: T = try await authSession.request(requestModel)
+            return response
+        } catch let error as HTTPError {
+            throw error
+        } catch {
+            throw HTTPError.anyError(error)
+        }
     }
     
     private func makeHttpHeaders(from headers: inout [String:String]?) {

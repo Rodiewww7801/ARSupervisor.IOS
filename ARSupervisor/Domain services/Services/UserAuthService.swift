@@ -5,7 +5,6 @@
 //  Created by Rodion Hladchenko on 01.10.2024.
 //
 
-import Combine
 
 class UserAuthService: UserAuthServiceProtocol {
     private let loginUserUseCase: LoginUserUseCaseProtocol
@@ -16,17 +15,14 @@ class UserAuthService: UserAuthServiceProtocol {
         self.registerUserUseCase = registerUserUseCase
     }
     
-    func login(_ credentials: UserCredentials) -> AnyPublisher<Void, ARSAuthError> {
-        let dto = LoginRequestDTO(email: credentials.email, password: credentials.password)
-        return loginUserUseCase.execute(dto)
+    func login(_ credentials: UserCredentials) async throws -> User {
+        let requestDTO = LoginRequestDTO(email: credentials.email, password: credentials.password)
+        let responseDTO =  try await loginUserUseCase.execute(requestDTO)
+        return User(id: responseDTO.userId)
     }
     
-    func register(_ user: User) -> AnyPublisher<Void, ARSAuthError> {
-        let dto = RegisterRequestDTO(email: user.credentials.email, password: user.credentials.password)
-        return registerUserUseCase.execute(dto)
-    }
-    
-    func logout() -> AnyPublisher<Void, any Error> {
-        fatalError()
+    func register(_ credentials: UserCredentials) async throws {
+        let dto = RegisterRequestDTO(email: credentials.email, password: credentials.password)
+        return try await registerUserUseCase.execute(dto)
     }
 }

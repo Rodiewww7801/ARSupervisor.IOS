@@ -13,7 +13,6 @@ class BackendAPIRequestFactory {
     }
     
     // MARK: - Authentication
-    
     static func register(with dto: RegisterRequestDTO) -> RequestModel {
         let encodedData = try? JSONEncoder().encode(dto)
         let model = RequestModel(basePath: serverAPI, path: ARSupervisorAPIPath.register, httpMethod: .post)
@@ -35,8 +34,10 @@ class BackendAPIRequestFactory {
         return model
     }
     
-    static func logout() -> RequestModel {
-        let model = RequestModel(basePath: serverAPI, path: ARSupervisorAPIPath.logout, httpMethod: .post)
+    //MARK: User
+    static func getUserInfo(for userId: String) -> RequestModel {
+        let path = ARSupervisorAPIPath.userInfo.replacingOccurrences(of: "{userId}", with: userId)
+        let model = RequestModel(basePath: serverAPI, path: path, httpMethod: .get)
         return model
     }
 }

@@ -7,6 +7,7 @@
 
 protocol DomainServiceDependency {
     func makeUserAuthService() -> UserAuthServiceProtocol
+    func makeUserDataService() -> UserDataServiceProtocol
 }
 
 extension DependencyContainerProtected: DomainServiceDependency {
@@ -17,5 +18,12 @@ extension DependencyContainerProtected: DomainServiceDependency {
                 authTokenRepository: repositoryDependency.makeAuthTokenRepository()),
             registerUserUseCase: RegisterUserUseCase(backendService: networkDependency.networkManager.backendNetworkService)
         )
+    }
+    
+    func makeUserDataService() -> UserDataServiceProtocol {
+        return UserDataService(
+            getUserInfoUseCase: GetUserInfoUseCase(backendService: networkDependency.networkManager.backendNetworkService),
+            getCurrentUserDBUseCase: GetCurrentUserDBUseCase(userDataRepository: repositoryDependency.makeUserDataRepository()),
+            saveUserDBUseCase: SaveUserDBUseCase(userDataRepository: repositoryDependency.makeUserDataRepository()))
     }
 }

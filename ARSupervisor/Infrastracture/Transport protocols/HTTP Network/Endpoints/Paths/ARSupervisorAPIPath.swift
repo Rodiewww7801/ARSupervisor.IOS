@@ -8,9 +8,10 @@
 enum ARSupervisorAPIPath {
     
     // MARK: - Authentication
-    static let register = "/api/authentication/register"
-    static let login = "/api/authentication/login"
-    static let refresh = "/api/authentication/refresh"
-    static let logout = "/api/authentication/logout"
+    static let register = "/api/auth/register"
+    static let login = "/api/auth/login"
+    static let refresh = "/api/auth/refresh"
     
+    //MARK: - User
+    static let userInfo = "/api/user/{userId}"
 }

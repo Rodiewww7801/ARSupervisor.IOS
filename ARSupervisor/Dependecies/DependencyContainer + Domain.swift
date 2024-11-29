@@ -21,7 +21,8 @@ extension DependencyContainerProtected: DomainDependency  {
     }
     
     private func makeUserManager() -> UserManagerProtocol {
-        UserManager(userAuthService: domainServiceDependency.makeUserAuthService())
+        UserManager(userAuthService: domainServiceDependency.makeUserAuthService(),
+                    userDataService: domainServiceDependency.makeUserDataService())
     }
     
     var cameraManager: CameraManagerProtocol {

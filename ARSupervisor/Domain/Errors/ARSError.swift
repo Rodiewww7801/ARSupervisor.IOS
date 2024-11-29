@@ -11,6 +11,7 @@ enum ARSAuthError: ARSError {
     case UserRegistrationError(message: String)
     case UserAuthenticationError(message: String)
     case FailedToRetriveToken(message: String)
+    case AnyError(message: String)
     
     var customDescription: String {
         switch self {
@@ -20,6 +21,12 @@ enum ARSAuthError: ARSError {
             return message
         case .FailedToRetriveToken(let message):
             return message
+        case .AnyError(let message):
+            return message
         }
     }
+}
+
+enum ARSPersistanceError: ARSError {
+    case UserDosentExist
 }

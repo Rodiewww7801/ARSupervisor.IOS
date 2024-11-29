@@ -8,50 +8,44 @@
 import Combine
 import SwiftUI
 
+@MainActor
 final class LoginViewModel: ObservableObject {
     @Published var showProgressView: Bool = false
     @Published var errorMessage: String?
     @Published var onSuccessLogin: Bool = false
+    private var userCredentials: UserCredentials?
     
     private let userManager: UserManagerProtocol = dependency.domainDependency.userManager
-    private var subscriptions = Set<AnyCancellable>()
     
-    func login(email: String, password: String) {
+    func login(email: String, password: String) async {
         let credentials = UserCredentials(email: email, password: password)
         showProgressView = true
-        userManager
-            .authUser(credentials)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { [weak self] completion in
-                guard let self else { return }
-                switch completion {
-                case .finished:
-                    self.onSuccessLogin = true
-                case .failure(let failure):
-                    self.errorMessage = failure.customDescription
-                }
-                self.showProgressView = false
-            }, receiveValue: { _ in })
-            .store(in: &subscriptions)
+        do {
+            defer { self.showProgressView = false }
+            try await userManager.authUser(credentials)
+            onSuccessLogin = true
+        } catch let error as ARSAuthError {
+            onSuccessLogin = false
+            self.errorMessage = error.customDescription
+        } catch {
+            onSuccessLogin = false
+            return
+        }
     }
     
-    func register(email: String, password: String) {
+    func register(email: String, password: String) async {
         let credentials = UserCredentials(email: email, password: password)
-        let user = User(credentials: credentials)
+        self.userCredentials = credentials
         showProgressView = true
-        userManager
-            .registerUser(user)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { [weak self] completion in
-                guard let self else { return }
-                switch completion {
-                case .finished:
-                    self.login(email: email, password: password)
-                case .failure(let failure):
-                    self.errorMessage = failure.customDescription
-                    self.showProgressView = false
-                }
-            }, receiveValue: { _ in })
-            .store(in: &subscriptions)
+        do {
+            defer { self.showProgressView = false }
+            try await userManager.registerUser(credentials)
+        } catch let error as ARSAuthError {
+            self.errorMessage = error.customDescription
+        } catch {
+            return
+        }
+        
+        await login(email: credentials.email, password: credentials.password)
     }
 }

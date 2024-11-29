@@ -15,6 +15,7 @@ enum MainRoute: NavigationRoute {
 
 class MainCoordinator: Coordinator {
     private var coordinatorFactory = dependency.coordinatorDependency.coordinatorFactory
+    private var userManager = dependency.domainDependency.userManager
     private var router: RouterProtocol
     var childCoordinators: [any Coordinator] = []
     
@@ -32,10 +33,17 @@ class MainCoordinator: Coordinator {
     }
     
     func start() {
-        startLoginFlow()
+        Task {
+            let result = await self.userManager.isUserSessionAlive()
+            if result {
+                startMainFlow()
+            } else {
+                startLoginFlow()
+            }
+        }
     }
     
-    func startLoginFlow() {
+    private func startLoginFlow() {
         let coordinator = coordinatorFactory.makeLoginCoordinator(router)
         self.childCoordinators.append(coordinator)
         coordinator.onSuccessLogin
@@ -48,7 +56,7 @@ class MainCoordinator: Coordinator {
         coordinator.start()
     }
     
-    func startMainFlow() {
+    private func startMainFlow() {
         let coordinator = MainTabBarCoordinator(self.router)
         self.childCoordinators.append(coordinator)
         coordinator.start()

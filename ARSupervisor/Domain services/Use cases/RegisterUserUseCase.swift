@@ -5,8 +5,6 @@
 //  Created by Rodion Hladchenko on 01.10.2024.
 //
 
-import Combine
-
 class RegisterUserUseCase: RegisterUserUseCaseProtocol {
     private let backendService: NetworkServiceProtocol
     
@@ -14,18 +12,13 @@ class RegisterUserUseCase: RegisterUserUseCaseProtocol {
         self.backendService = backendService
     }
     
-    func execute(_ dto: RegisterRequestDTO) -> AnyPublisher<Void, ARSAuthError> {
+    func execute(_ dto: RegisterRequestDTO) async throws {
         let requestModel = BackendAPIRequestFactory.register(with: dto)
-        let publisher: AnyPublisher<EmptyResponse, HTTPError> = backendService.request(requestModel)
-        return publisher
-            .mapError { error -> ARSAuthError in
-                return ARSAuthError.UserRegistrationError(message: error.localizedDescription)
-            }
-            .flatMap { dto -> Future<Void, ARSAuthError> in
-                Future<Void, ARSAuthError> { promise in
-                    promise(.success( Void() ))
-                }
-            }.eraseToAnyPublisher()
-        
+        do {
+            let _: EmptyResponse = try await backendService.request(requestModel)
+            return
+        } catch let error as ARSAuthError {
+            throw ARSAuthError.UserRegistrationError(message: error.localizedDescription)
+        }
     }
 }

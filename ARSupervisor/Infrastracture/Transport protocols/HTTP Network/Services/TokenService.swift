@@ -6,12 +6,10 @@
 //
 
 import Foundation
-import Combine
 
 class TokenService: TokenServiceProtocol {
     private let session: NetworkSessionProtocol
     private let authTokenRepository: AuthTokenRepositoryProtocol
-    private var subcriptions: Set<AnyCancellable> = .init()
     
     var accessToken: EncodedToken? {
         return authTokenRepository.getToken(for: .accessTokenKey)
@@ -25,32 +23,22 @@ class TokenService: TokenServiceProtocol {
         self.authTokenRepository = authTokenRepository
     }
     
-    func refreshTokenPublisher() -> AnyPublisher<Void, ARSAuthError> {
+    func refreshTokenPublisher() async throws {
         guard let refreshToken = authTokenRepository.getToken(for: .refreshTokenKey) else {
-            return Future<Void, ARSAuthError> { promise in
-                promise(.failure(ARSAuthError.FailedToRetriveToken(message: "Refresh token is missing")))
-            }.eraseToAnyPublisher()
+            throw ARSAuthError.FailedToRetriveToken(message: "Refresh token is missing")
         }
-        
         let dto = RefreshRequestDTO(refreshToken: refreshToken)
         let requestModel = BackendAPIRequestFactory.refresh(with: dto)
-        let refreshTokenRequestPublisher: AnyPublisher<TokensResponseDTO, any Error> = session.publisher(requestModel)
-        
-        return refreshTokenRequestPublisher
-            .mapError { error -> ARSAuthError in
-                if let error = error as? HTTPError {
-                    return ARSAuthError.FailedToRetriveToken(message: error.customDescription)
-                } else {
-                    return ARSAuthError.FailedToRetriveToken(message: error.localizedDescription)
-                }
-            }
-            .flatMap { dto -> Future<Void, ARSAuthError> in
-                Future { promise in
-                    self.authTokenRepository.setToken(dto.accessToken, for: .accessTokenKey)
-                    self.authTokenRepository.setToken(dto.refreshToken, for: .refreshTokenKey)
-                    promise(.success( () ))
-                }
-            }.eraseToAnyPublisher()
+        do {
+            let dto: TokensResponseDTO = try await session.request(requestModel)
+            self.authTokenRepository.setToken(dto.accessToken, for: .accessTokenKey)
+            self.authTokenRepository.setToken(dto.refreshToken, for: .refreshTokenKey)
+            return
+        } catch let error as HTTPError {
+            throw ARSAuthError.FailedToRetriveToken(message: error.customDescription)
+        } catch {
+            throw ARSAuthError.FailedToRetriveToken(message: error.localizedDescription)
+        }
     }
     
     var isTokeValid: Bool {

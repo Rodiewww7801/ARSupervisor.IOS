@@ -8,7 +8,8 @@
 import Foundation
 
 struct UserInfo {
-    let fisrtName: String
-    let secondName: String
-    let dateOfBirth: Date
+    let email: String?
+    let firstName: String?
+    let lastName: String?
+    let imageURL: String?
 }

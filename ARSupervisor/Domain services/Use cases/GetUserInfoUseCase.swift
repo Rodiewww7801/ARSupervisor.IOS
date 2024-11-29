@@ -1,0 +1,20 @@
+//
+//  GetUserInfoUseCase.swift
+//  ARSupervisor
+//
+//  Created by rodiewww7801_temp on 27.11.2024.
+//
+
+class GetUserInfoUseCase: GetUserInfoUseCaseProtocol {
+    private let backendService: NetworkServiceProtocol
+    
+    init(backendService: NetworkServiceProtocol) {
+        self.backendService = backendService
+    }
+    
+    func execute(_ userId: String) async throws -> UserInfoDTO {
+        let requestModel = BackendAPIRequestFactory.getUserInfo(for: userId)
+        let dto: UserInfoDTO = try await backendService.authRequest(requestModel)
+        return dto
+    }
+}

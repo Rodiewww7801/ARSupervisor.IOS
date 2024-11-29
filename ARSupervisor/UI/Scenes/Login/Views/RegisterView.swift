@@ -44,7 +44,9 @@ struct RegisterView: View {
             
             Button("Register account") {
                 hideKeyboard()
-                viewModel.register(email: self.email, password: self.password)
+                Task {
+                    await viewModel.register(email: self.email, password: self.password)
+                }
             }.disabled(self.registerDisabled)
                 .padding()
             

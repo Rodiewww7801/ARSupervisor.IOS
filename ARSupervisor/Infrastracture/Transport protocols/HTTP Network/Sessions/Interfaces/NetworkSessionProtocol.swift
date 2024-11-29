@@ -6,8 +6,7 @@
 //
 
 import Foundation
-import Combine
 
 protocol NetworkSessionProtocol {
-    func publisher<T>(_ requestModel: RequestModel) -> AnyPublisher<T, any Error> where T: Decodable
+    func request<T>(_ requestModel: RequestModel) async throws -> T where T: Decodable
 }

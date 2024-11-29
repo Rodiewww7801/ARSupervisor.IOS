@@ -5,7 +5,6 @@
 //  Created by Rodion Hladchenko on 28.09.2024.
 //
 
-import Combine
 import Foundation
 
 class AuthSession: NetworkSessionProtocol {
@@ -21,18 +20,16 @@ class AuthSession: NetworkSessionProtocol {
         self.tokenService = tokenService
     }
     
-    func publisher<T>(_ requestModel: RequestModel) -> AnyPublisher<T, any Error> where T: Decodable {
-        self.addAuthHeaders(from: &requestModel.headers)
-        let requestPublisher: AnyPublisher<T, Error> = session.publisher(requestModel)
-        return requestPublisher
-            .catch { error -> AnyPublisher<T, Error> in
-                self.tokenService.refreshTokenPublisher()
-                    .mapError { $0 as Error }
-                    .flatMap { () -> AnyPublisher<T, Error> in
-                        return self.session.publisher(requestModel)
-                    }
-                    .eraseToAnyPublisher()
-            }.eraseToAnyPublisher()
+    func request<T>(_ requestModel: RequestModel) async throws -> T where T: Decodable {
+        do {
+            self.addAuthHeaders(from: &requestModel.headers)
+            let request: T = try await session.request(requestModel)
+            return request
+        } catch {
+            try await self.tokenService.refreshTokenPublisher()
+            let request: T = try await session.request(requestModel)
+            return request
+        }
     }
     
     func isSessionValid() -> Bool {
@@ -41,7 +38,7 @@ class AuthSession: NetworkSessionProtocol {
     
     func addAuthHeaders(from headers: inout [String:String]?) {
         if let accessToken = tokenService.accessToken {
-            headers?.updateValue("Bearer \(accessToken)", forKey: "Authorization")
+            headers?.updateValue("\(accessToken)", forKey: "Authorization")
         }
     }
 }

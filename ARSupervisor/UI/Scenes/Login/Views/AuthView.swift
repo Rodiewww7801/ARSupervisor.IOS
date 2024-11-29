@@ -42,7 +42,9 @@ struct AuthView: View {
             
             Button("Log in") {
                 hideKeyboard()
-                viewModel.login(email: self.email, password: self.password)
+                Task {
+                    await viewModel.login(email: self.email, password: self.password)
+                }
             }.disabled(self.loginDisabled)
                 .padding()
             
