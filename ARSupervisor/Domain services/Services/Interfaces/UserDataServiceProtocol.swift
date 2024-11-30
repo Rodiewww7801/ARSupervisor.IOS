@@ -7,6 +7,6 @@
 
 protocol UserDataServiceProtocol: Sendable {
     func getUserInfo(for userId: String) async throws -> UserInfo
-    func getCurrentUserDB() async throws -> UserInfoDTO?
+    func getCurrentUserDB() async throws -> User?
     func saveUserDB(_ user: User) async throws
 }

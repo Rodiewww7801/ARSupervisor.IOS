@@ -42,10 +42,8 @@ actor UserManager: UserManagerProtocol {
         if let currentUser = await self.currentUser {
             return currentUser
         } else {
-            let dto = try await self.userDataService.getCurrentUserDB()
-            guard let dto else { return  nil }
-            let currentUser = User(id: dto.id)
-            currentUser.info = dto.toModel()
+            let currentUser = try await self.userDataService.getCurrentUserDB()
+            guard let currentUser else { return  nil }
             try await setCurrentUser(currentUser)
             return currentUser
         }

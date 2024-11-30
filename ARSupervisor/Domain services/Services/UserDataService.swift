@@ -24,10 +24,15 @@ actor UserDataService: UserDataServiceProtocol {
         return userInfo
     }
    
-    func getCurrentUserDB() async throws -> UserInfoDTO? {
+    func getCurrentUserDB() async throws -> User? {
         let dto = try await self.getCurrentUserDBUseCase.execute()
         guard let dto else { return nil }
-        return dto
+        let user = await Task { @UserManagerActor in
+            let user = User(id: dto.id)
+            user.info = dto.toModel()
+            return user
+        }.value
+        return user
     }
     
     func saveUserDB(_ user: User) async throws {

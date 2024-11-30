@@ -6,7 +6,7 @@
 //
 
 @UserManagerActor
-class User: Sendable {
+class User {
     let id: String
     var info: UserInfo?
     var accessLevel: UserAccessLevel = UserAccessLevel(securityLevel: 0)
