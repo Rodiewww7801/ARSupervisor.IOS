@@ -15,11 +15,9 @@ actor UserManager: UserManagerProtocol {
         self.userDataService = userDataService
     }
    
-    @UserManagerActor
     func authUser(_ credentials: UserCredentials) async throws {
-        let dto = try await self.userAuthService.login(credentials)
-        let user = User(id: dto.userId)
-        try await setCurrentUser(user)
+        let user = try await self.userAuthService.login(credentials)
+        self.currentUser = user
         async let _ = saveCurrentUser()
     }
     
@@ -37,20 +35,15 @@ actor UserManager: UserManagerProtocol {
         }
     }
     
-    @UserManagerActor
     func getCurrentUser() async throws -> User? {
-        if let currentUser = await self.currentUser {
+        if let currentUser = self.currentUser {
             return currentUser
         } else {
             let currentUser = try await self.userDataService.getCurrentUserDB()
             guard let currentUser else { return  nil }
-            try await setCurrentUser(currentUser)
+            self.currentUser = currentUser
             return currentUser
         }
-    }
-    
-    private func setCurrentUser(_ user: User) async throws {
-        self.currentUser = user
     }
     
     private func saveCurrentUser() async throws {

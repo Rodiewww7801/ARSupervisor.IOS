@@ -15,10 +15,13 @@ final class UserAuthService: UserAuthServiceProtocol {
         self.registerUserUseCase = registerUserUseCase
     }
     
-    func login(_ credentials: UserCredentials) async throws -> LoginResponseDTO {
+    func login(_ credentials: UserCredentials) async throws -> User {
         let requestDTO = LoginRequestDTO(email: credentials.email, password: credentials.password)
         let responseDTO =  try await loginUserUseCase.execute(requestDTO)
-        return responseDTO
+        let user = await Task { @UserManagerActor in
+            return User(id: responseDTO.userId)
+        }.value
+        return user
     }
     
     func register(_ credentials: UserCredentials) async throws {

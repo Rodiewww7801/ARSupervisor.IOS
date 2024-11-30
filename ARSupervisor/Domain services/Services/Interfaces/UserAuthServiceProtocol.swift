@@ -6,6 +6,6 @@
 //
 
 protocol UserAuthServiceProtocol: Sendable {
-    func login(_ credentials: UserCredentials) async throws -> LoginResponseDTO
+    func login(_ credentials: UserCredentials) async throws -> User
     func register(_ credentials: UserCredentials) async throws
 }
