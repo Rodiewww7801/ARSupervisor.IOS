@@ -7,7 +7,7 @@
 
 import UIKit
 
-public typealias Presentable = UIViewController & RouteProvider
+public typealias Presentable = UIViewController
 
 /// `Router` encapsulate specific navigation logic.
 @MainActor

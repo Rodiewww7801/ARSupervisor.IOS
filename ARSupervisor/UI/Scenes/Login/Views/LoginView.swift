@@ -21,9 +21,6 @@ struct LoginView: View {
     var body: some View {
         ZStack {
             VStack {
-                Spacer()
-                    .frame(width: 1, height: 220)
-                
                 Image("logo")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -53,12 +50,6 @@ struct LoginView: View {
                     })
                     .padding()
                 }
-                
-                Spacer()
-                
-                Text("by rodiewww7801")
-                    .font(.system(size: 12))
-                    .foregroundStyle(Color.gray)
             }
             
             if viewModel.showProgressView {

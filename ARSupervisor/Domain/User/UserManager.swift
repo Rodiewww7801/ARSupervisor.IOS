@@ -17,12 +17,8 @@ class UserManager: UserManagerProtocol, @unchecked Sendable {
     }
     
     func authUser(_ credentials: UserCredentials) async throws {
-        do {
-            let user = try await self.userAuthService.login(credentials)
-            async let _ = try setCurrentUser(user)
-        } catch {
-            print("[UserManager]: ERROR \(error)")
-        }
+        let user = try await self.userAuthService.login(credentials)
+        async let _ = try setCurrentUser(user)
     }
     
     func registerUser(_ credentials: UserCredentials) async throws {

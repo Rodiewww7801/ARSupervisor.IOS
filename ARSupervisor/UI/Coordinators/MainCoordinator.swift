@@ -33,6 +33,7 @@ class MainCoordinator: Coordinator {
     }
     
     func start() {
+        showLaunchScreen()
         Task {
             let result = await self.userManager.isUserSessionAlive()
             if result {
@@ -60,5 +61,11 @@ class MainCoordinator: Coordinator {
         let coordinator = MainTabBarCoordinator(self.router)
         self.childCoordinators.append(coordinator)
         coordinator.start()
+    }
+    
+    private func showLaunchScreen() {
+        let storyboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "LaunchScreenID")
+        router.setRootModule(vc, animated: false)
     }
 }

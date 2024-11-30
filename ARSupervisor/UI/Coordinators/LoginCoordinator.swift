@@ -33,7 +33,7 @@ class LoginCoordinator: Coordinator, LoginCoordinatorOutput {
     
     func showLoginView() {
         let view = factory(for: .login)
-        router.push(view, animated: true)
+        router.setRootModule(view, animated: true)
     }
 }
 

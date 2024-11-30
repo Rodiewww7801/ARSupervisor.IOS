@@ -10,8 +10,9 @@ import Combine
 @preconcurrency import AVFoundation
 
 
-class QRCodeCaptureSessionVC: Presentable {
+class QRCodeCaptureSessionVC: UIViewController, RouteProvider {
     var route: (any NavigationRoute)?
+    //TODO: fix unsafe
     nonisolated(unsafe) let session: AVCaptureSession = AVCaptureSession()
     
     init(for route: any NavigationRoute) {

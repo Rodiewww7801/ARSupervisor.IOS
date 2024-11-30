@@ -15,7 +15,7 @@ class TabBarPresentable<Route: NavigationRoute> {
     }
     
     var route: Route?  {
-        return viewController.route as? Route
+        return (viewController as? RouteProvider)?.route as? Route
     }
     
     init(_ viewController: Presentable, title: String?, image: UIImage?, tag: Int) {
