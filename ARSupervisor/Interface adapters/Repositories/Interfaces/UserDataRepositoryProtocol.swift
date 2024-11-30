@@ -7,7 +7,7 @@
 
 import SwiftData
 
-protocol UserDataRepositoryProtocol {
-    func getCurrentUser() async throws -> UserInfoDTO
+protocol UserDataRepositoryProtocol: Sendable {
+    func getCurrentUser() async throws -> UserInfoDTO?
     func saveUser(_ user: UserInfoDTO) async throws
 }

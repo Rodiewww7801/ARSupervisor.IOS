@@ -6,7 +6,7 @@
 //
 
 
-class UserAuthService: UserAuthServiceProtocol {
+final class UserAuthService: UserAuthServiceProtocol {
     private let loginUserUseCase: LoginUserUseCaseProtocol
     private let registerUserUseCase: RegisterUserUseCaseProtocol
     
@@ -15,10 +15,10 @@ class UserAuthService: UserAuthServiceProtocol {
         self.registerUserUseCase = registerUserUseCase
     }
     
-    func login(_ credentials: UserCredentials) async throws -> User {
+    func login(_ credentials: UserCredentials) async throws -> LoginResponseDTO {
         let requestDTO = LoginRequestDTO(email: credentials.email, password: credentials.password)
         let responseDTO =  try await loginUserUseCase.execute(requestDTO)
-        return User(id: responseDTO.userId)
+        return responseDTO
     }
     
     func register(_ credentials: UserCredentials) async throws {

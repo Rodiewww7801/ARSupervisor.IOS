@@ -5,7 +5,7 @@
 //  Created by rodiewww7801_temp on 28.11.2024.
 //
 
-class SaveUserDBUseCase: SaveUserDBUseCaseProtocol {
+final class SaveUserDBUseCase: SaveUserDBUseCaseProtocol {
     private let userDataRepository: UserDataRepositoryProtocol
     
     init(userDataRepository: UserDataRepositoryProtocol) {

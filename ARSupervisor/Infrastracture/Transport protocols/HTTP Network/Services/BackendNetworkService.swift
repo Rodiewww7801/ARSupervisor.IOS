@@ -7,7 +7,7 @@
 
 import Foundation
 
-class BackendNetworkService: NetworkServiceProtocol {
+final class BackendNetworkService: NetworkServiceProtocol {
     let authSession: NetworkSessionProtocol
     let session: NetworkSessionProtocol
     
@@ -19,6 +19,7 @@ class BackendNetworkService: NetworkServiceProtocol {
     }
     
     func request<T>(_ requestModel: RequestModel) async throws -> T where T: Decodable {
+        var requestModel = requestModel
         makeHttpHeaders(from: &requestModel.headers)
         do {
             let response: T = try await session.request(requestModel)
@@ -31,6 +32,7 @@ class BackendNetworkService: NetworkServiceProtocol {
     }
     
     func authRequest<T>(_ requestModel: RequestModel) async throws -> T where T: Decodable {
+        var requestModel = requestModel
         makeHttpHeaders(from: &requestModel.headers)
         do {
             let response: T = try await authSession.request(requestModel)

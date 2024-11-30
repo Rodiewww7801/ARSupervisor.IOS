@@ -7,7 +7,7 @@
 
 import Foundation
 
-class DefaultSession: NetworkSessionProtocol {
+final class DefaultSession: NetworkSessionProtocol {
     private let session: URLSession
     
     init() {

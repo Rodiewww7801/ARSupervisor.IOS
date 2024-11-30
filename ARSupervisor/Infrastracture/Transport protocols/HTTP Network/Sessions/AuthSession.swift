@@ -7,7 +7,7 @@
 
 import Foundation
 
-class AuthSession: NetworkSessionProtocol {
+final class AuthSession: NetworkSessionProtocol {
     let session: NetworkSessionProtocol
     let tokenService: TokenServiceProtocol
     let sessionQueue: DispatchQueue = DispatchQueue(label: "auth.session.queue.\(UUID().uuidString)")
@@ -22,7 +22,8 @@ class AuthSession: NetworkSessionProtocol {
     
     func request<T>(_ requestModel: RequestModel) async throws -> T where T: Decodable {
         do {
-            self.addAuthHeaders(from: &requestModel.headers)
+            var requestModel = requestModel
+            await self.addAuthHeaders(from: &requestModel.headers)
             let request: T = try await session.request(requestModel)
             return request
         } catch {
@@ -32,12 +33,12 @@ class AuthSession: NetworkSessionProtocol {
         }
     }
     
-    func isSessionValid() -> Bool {
-        self.tokenService.isTokeValid
+    func isSessionValid() async -> Bool {
+        await self.tokenService.isTokeValid()
     }
     
-    func addAuthHeaders(from headers: inout [String:String]?) {
-        if let accessToken = tokenService.accessToken {
+    func addAuthHeaders(from headers: inout [String:String]?) async {
+        if let accessToken = await tokenService.accessToken() {
             headers?.updateValue("\(accessToken)", forKey: "Authorization")
         }
     }

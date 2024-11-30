@@ -5,7 +5,8 @@
 //  Created by Rodion Hladchenko on 25.09.2024.
 //
 
-class User {
+@UserManagerActor
+class User: Sendable {
     let id: String
     var info: UserInfo?
     var accessLevel: UserAccessLevel = UserAccessLevel(securityLevel: 0)

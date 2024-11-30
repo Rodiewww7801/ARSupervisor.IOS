@@ -7,7 +7,7 @@
 
 import Foundation
 
-class AuthTokenRepository: AuthTokenRepositoryProtocol {
+actor AuthTokenRepository: AuthTokenRepositoryProtocol {
     private let securedStorage: SecureStorageProtocol
     
     init(securedStorage: SecureStorageProtocol) {

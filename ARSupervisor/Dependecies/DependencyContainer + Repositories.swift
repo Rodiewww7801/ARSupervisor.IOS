@@ -18,7 +18,6 @@ extension DependencyContainerProtected: RepositoryDependency  {
     }
     
     func makeUserDataRepository() -> UserDataRepositoryProtocol {
-        //TODO: refactor try
-        return UserDataRepository(modelContainer: try! ModelContainer(for: SDUser.self))
+        return UserDataRepository(database: storageDependency.makeUserDatabase())
     }
 }

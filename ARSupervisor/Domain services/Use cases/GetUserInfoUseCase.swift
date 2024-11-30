@@ -5,7 +5,7 @@
 //  Created by rodiewww7801_temp on 27.11.2024.
 //
 
-class GetUserInfoUseCase: GetUserInfoUseCaseProtocol {
+final class GetUserInfoUseCase: GetUserInfoUseCaseProtocol {
     private let backendService: NetworkServiceProtocol
     
     init(backendService: NetworkServiceProtocol) {

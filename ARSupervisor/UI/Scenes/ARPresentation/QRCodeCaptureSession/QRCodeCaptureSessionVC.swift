@@ -12,8 +12,7 @@ import Combine
 
 class QRCodeCaptureSessionVC: UIViewController, RouteProvider {
     var route: (any NavigationRoute)?
-    //TODO: fix unsafe
-    nonisolated(unsafe) let session: AVCaptureSession = AVCaptureSession()
+    let session: AVCaptureSession = AVCaptureSession()
     
     init(for route: any NavigationRoute) {
         self.route = route
@@ -58,7 +57,8 @@ class QRCodeCaptureSessionVC: UIViewController, RouteProvider {
             previewLayer.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
             
             view.layer.insertSublayer(previewLayer, at: 0)
-            DispatchQueue.global().async {
+            
+            Task {
                 self.session.startRunning()
             }
         } catch {

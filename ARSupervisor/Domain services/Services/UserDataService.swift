@@ -5,7 +5,7 @@
 //  Created by rodiewww7801_temp on 28.11.2024.
 //
 
-class UserDataService: UserDataServiceProtocol {
+actor UserDataService: UserDataServiceProtocol {
     private let getUserInfoUseCase: GetUserInfoUseCaseProtocol
     private let getCurrentUserDBUseCase: GetCurrentUserDBUseCaseProtocol
     private let saveUserDBUseCase: SaveUserDBUseCaseProtocol
@@ -23,16 +23,15 @@ class UserDataService: UserDataServiceProtocol {
         let userInfo = dto.toModel()
         return userInfo
     }
-    
-    func getCurrentUserDB() async throws -> User {
+   
+    func getCurrentUserDB() async throws -> UserInfoDTO? {
         let dto = try await self.getCurrentUserDBUseCase.execute()
-        let user = User(id: dto.id)
-        user.info = dto.toModel()
-        return user
+        guard let dto else { return nil }
+        return dto
     }
     
     func saveUserDB(_ user: User) async throws {
-        let dto = UserInfoDTO(id: user.id,
+        let dto = await UserInfoDTO(id: user.id,
                               email: user.info?.email,
                               imageURL: user.info?.imageURL,
                               firstName: user.info?.firstName,

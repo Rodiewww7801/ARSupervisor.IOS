@@ -7,7 +7,7 @@
 
 import Foundation
 
-class RequestModel {
+struct RequestModel {
     var basePath: String
     var path: String
     var httpMethod: HTTPMethod

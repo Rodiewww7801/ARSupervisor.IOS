@@ -5,8 +5,7 @@
 //  Created by Rodion Hladchenko on 01.10.2024.
 //
 
-//todo: remove unsafe
-class UserManager: UserManagerProtocol, @unchecked Sendable {
+actor UserManager: UserManagerProtocol {
     private let userAuthService: UserAuthServiceProtocol
     private let userDataService: UserDataServiceProtocol
     private var currentUser: User?
@@ -15,10 +14,13 @@ class UserManager: UserManagerProtocol, @unchecked Sendable {
         self.userAuthService = userAuthService
         self.userDataService = userDataService
     }
-    
+   
+    @UserManagerActor
     func authUser(_ credentials: UserCredentials) async throws {
-        let user = try await self.userAuthService.login(credentials)
-        async let _ = try setCurrentUser(user)
+        let dto = try await self.userAuthService.login(credentials)
+        let user = User(id: dto.userId)
+        try await setCurrentUser(user)
+        async let _ = saveCurrentUser()
     }
     
     func registerUser(_ credentials: UserCredentials) async throws {
@@ -26,26 +28,35 @@ class UserManager: UserManagerProtocol, @unchecked Sendable {
     }
     
     func isUserSessionAlive() async -> Bool {
-        do {
-            let user = try await self.getCurrentUser()
-            let _ = try await self.userDataService.getUserInfo(for: user.id)
+        let user = try? await self.getCurrentUser()
+        if let user {
+            let _ = try? await self.userDataService.getUserInfo(for: user.id)
             return true
-        } catch {
+        } else {
             return false
         }
     }
     
-    func getCurrentUser() async throws -> User {
-        if let currentUser {
+    @UserManagerActor
+    func getCurrentUser() async throws -> User? {
+        if let currentUser = await self.currentUser {
             return currentUser
         } else {
-            let currentUser = try await self.userDataService.getCurrentUserDB()
-            self.currentUser = currentUser
+            let dto = try await self.userDataService.getCurrentUserDB()
+            guard let dto else { return  nil }
+            let currentUser = User(id: dto.id)
+            currentUser.info = dto.toModel()
+            try await setCurrentUser(currentUser)
             return currentUser
         }
     }
     
     private func setCurrentUser(_ user: User) async throws {
+        self.currentUser = user
+    }
+    
+    private func saveCurrentUser() async throws {
+        guard let user = self.currentUser else { return }
         self.currentUser = user
         try await userDataService.saveUserDB(user)
     }

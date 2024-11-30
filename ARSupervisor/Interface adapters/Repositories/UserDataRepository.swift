@@ -6,26 +6,22 @@
 //
 
 import SwiftData
+import Foundation
 
-@ModelActor
-actor UserDataRepository: @preconcurrency UserDataRepositoryProtocol {
-    func getCurrentUser() throws -> UserInfoDTO {
-        return try self.getCurrentSDUser().toModel()
+
+actor UserDataRepository: UserDataRepositoryProtocol {
+    private let database: any DatabaseProtocol<SDUser>
+    
+    init(database: any DatabaseProtocol<SDUser>) {
+        self.database = database
     }
     
-    func saveUser(_ user: UserInfoDTO) throws {
+    func getCurrentUser() async throws -> UserInfoDTO? {
+        return try await self.database.read(predicate: nil, sortDescriptors: []).first?.toModel()
+    }
+    
+    func saveUser(_ user: UserInfoDTO) async throws {
         let userSD = SDUser(user)
-        self.modelContext.insert(userSD)
-        try modelContext.save()
-    }
-    
-    private func getCurrentSDUser() throws -> SDUser {
-        let descriptor = FetchDescriptor<SDUser>()
-        let user = try modelContext.fetch(descriptor).first
-        if let user  {
-            return user
-        } else {
-            throw ARSPersistanceError.UserDosentExist
-        }
+        try await database.update(userSD)
     }
 }

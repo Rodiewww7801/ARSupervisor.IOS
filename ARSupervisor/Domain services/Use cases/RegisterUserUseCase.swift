@@ -5,7 +5,7 @@
 //  Created by Rodion Hladchenko on 01.10.2024.
 //
 
-class RegisterUserUseCase: RegisterUserUseCaseProtocol {
+final class RegisterUserUseCase: RegisterUserUseCaseProtocol {
     private let backendService: NetworkServiceProtocol
     
     init(backendService: NetworkServiceProtocol) {

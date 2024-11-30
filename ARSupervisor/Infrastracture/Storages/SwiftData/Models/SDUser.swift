@@ -8,7 +8,7 @@
 import SwiftData
 
 @Model
-final class SDUser {
+final class SDUser: @unchecked Sendable {
     @Attribute(.unique)
     var id: String
     var email: String?

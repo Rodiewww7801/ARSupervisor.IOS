@@ -5,8 +5,11 @@
 //  Created by Rodion Hladchenko on 29.09.2024.
 //
 
+import SwiftData
+
 protocol StorageDependency {
     var keychainStorage: SecureStorageProtocol { get }
+    func makeUserDatabase() -> any DatabaseProtocol<SDUser>
 }
 
 extension DependencyContainerProtected: StorageDependency {
@@ -22,5 +25,9 @@ extension DependencyContainerProtected: StorageDependency {
     private func makeKeychainStorage() -> SecureStorageProtocol {
         let keychainStorage = KeychainStorage(secureStorageQueryable: GenericPasswordQueryable(service: "AuthenticationTokenService"))
         return keychainStorage
+    }
+    
+    func makeUserDatabase() -> any DatabaseProtocol<SDUser> {
+        return try! SwiftDatabaseFactory().factory(for: SDUser.self)
     }
 }

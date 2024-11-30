@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol NetworkSessionProtocol {
+protocol NetworkSessionProtocol: Sendable {
     func request<T>(_ requestModel: RequestModel) async throws -> T where T: Decodable
 }

@@ -5,6 +5,6 @@
 //  Created by rodiewww7801_temp on 28.11.2024.
 //
 
-protocol SaveUserDBUseCaseProtocol {
+protocol SaveUserDBUseCaseProtocol: Sendable {
     func execute(_ user: UserInfoDTO) async throws
 }
