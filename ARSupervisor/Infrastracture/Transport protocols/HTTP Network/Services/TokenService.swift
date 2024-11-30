@@ -29,7 +29,7 @@ final class TokenService: TokenServiceProtocol {
             throw ARSAuthError.FailedToRetriveToken(message: "Refresh token is missing")
         }
         let dto = RefreshRequestDTO(refreshToken: refreshToken)
-        let requestModel = BackendAPIRequestFactory.refresh(with: dto)
+        let requestModel = BackendAPIRoute.refresh(with: dto)
         do {
             let dto: TokensResponseDTO = try await session.request(requestModel)
             await self.authTokenRepository.setToken(dto.accessToken, for: .accessTokenKey)

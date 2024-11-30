@@ -16,7 +16,7 @@ final class LoginUserUseCase: LoginUserUseCaseProtocol {
     }
    
     func execute(_ dto: LoginRequestDTO) async throws -> LoginResponseDTO {
-        let requestModel = BackendAPIRequestFactory.login(with: dto)
+        let requestModel = BackendAPIRoute.login(with: dto)
         do {
             let dto: LoginResponseDTO = try await backendService.request(requestModel)
             await self.authTokenRepository.setToken(dto.accessToken, for: .accessTokenKey)

@@ -13,7 +13,7 @@ final class GetUserInfoUseCase: GetUserInfoUseCaseProtocol {
     }
     
     func execute(_ userId: String) async throws -> UserInfoDTO {
-        let requestModel = BackendAPIRequestFactory.getUserInfo(for: userId)
+        let requestModel = BackendAPIRoute.getUserInfo(for: userId)
         let dto: UserInfoDTO = try await backendService.authRequest(requestModel)
         return dto
     }

@@ -13,7 +13,7 @@ final class RegisterUserUseCase: RegisterUserUseCaseProtocol {
     }
     
     func execute(_ dto: RegisterRequestDTO) async throws {
-        let requestModel = BackendAPIRequestFactory.register(with: dto)
+        let requestModel = BackendAPIRoute.register(with: dto)
         do {
             let _: EmptyResponse = try await backendService.request(requestModel)
             return

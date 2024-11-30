@@ -1,11 +1,11 @@
 //
-//  ARSupervisorAPIPath.swift
+//  BackendAPIPath.swift
 //  ARSupervisor
 //
 //  Created by Rodion Hladchenko on 29.09.2024.
 //
 
-enum ARSupervisorAPIPath {
+enum BackendAPIPath {
     
     // MARK: - Authentication
     static let register = "/api/auth/register"
